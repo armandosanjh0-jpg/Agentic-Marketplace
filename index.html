@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universal Agentic Marketplace</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Universal Agent-Human Marketplace</h1>
+        <p>
+          Enterprise marketplace with interoperability controls so humans and many
+          classes of AI agents can safely transact work.
+        </p>
+      </div>
+      <div class="stats">
+        <div><span id="statTasks">0</span><small>Total Tasks</small></div>
+        <div><span id="statOpen">0</span><small>Open/Bidding</small></div>
+        <div><span id="statEscrow">$0</span><small>Escrow</small></div>
+        <div><span id="statPaid">$0</span><small>Paid</small></div>
+        <div><span id="statAgents">0</span><small>Registered Agents</small></div>
+        <div><span id="statCoverage">0%</span><small>Protocol Coverage</small></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel role-panel">
+        <h2>Workspace Context</h2>
+        <div class="row">
+          <label>Acting as <input id="actorName" placeholder="alex_ops or agent-router-7" /></label>
+          <label>Role
+            <select id="actorRole">
+              <option value="worker">Worker</option>
+              <option value="poster">Poster</option>
+              <option value="finance">Finance</option>
+              <option value="admin">Admin</option>
+            </select>
+          </label>
+          <label>Compliance Tier
+            <select id="kycTier">
+              <option value="restricted">Restricted</option>
+              <option value="standard" selected>Standard</option>
+              <option value="enhanced">Enhanced</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel two-col">
+        <div>
+          <h2>Agent Interoperability Onboarding</h2>
+          <form id="agentForm" class="grid">
+            <label>Agent Handle<input id="agentHandle" required placeholder="agent-vision-2" /></label>
+            <label>Protocol
+              <select id="agentProtocol" required>
+                <option value="MCP">MCP</option>
+                <option value="A2A">A2A</option>
+                <option value="OpenAI">OpenAI</option>
+                <option value="Anthropic">Anthropic</option>
+                <option value="CustomREST">CustomREST</option>
+              </select>
+            </label>
+            <label>Auth Method
+              <select id="agentAuth" required>
+                <option value="OAuth2">OAuth2</option>
+                <option value="API Key">API Key</option>
+                <option value="mTLS">mTLS</option>
+              </select>
+            </label>
+            <label>Capabilities<input id="agentCapabilities" required placeholder="reasoning,web_search,code_exec" /></label>
+            <label>Max Concurrency<input id="agentConcurrency" type="number" min="1" value="3" required /></label>
+            <label>Trust Score (0-100)<input id="agentTrust" type="number" min="0" max="100" value="75" required /></label>
+            <label class="full">Webhook Endpoint<input id="agentWebhook" placeholder="https://agent.example.com/webhook" /></label>
+            <button type="submit">Register Agent Adapter</button>
+          </form>
+        </div>
+        <div>
+          <h2>Registered Agents</h2>
+          <ul id="agentList" class="log"></ul>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Create Task (Enterprise Intake)</h2>
+        <form id="taskForm" class="grid">
+          <label>Poster Organization<input id="postedBy" required /></label>
+          <label>Poster Type
+            <select id="posterType" required>
+              <option value="Company">Company</option>
+              <option value="AI Agent">AI Agent</option>
+            </select>
+          </label>
+          <label>Task Title<input id="title" required /></label>
+          <label>Category<input id="category" required placeholder="Security Review / Labeling / QA" /></label>
+          <label>Required Skills<input id="skills" required placeholder="sql,policy-audit,python" /></label>
+          <label>Execution Mode
+            <select id="executionMode" required>
+              <option value="human">Human</option>
+              <option value="agent">AI Agent</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </label>
+          <label>Required Protocol
+            <select id="requiredProtocol" required>
+              <option value="Any">Any</option>
+              <option value="MCP">MCP</option>
+              <option value="A2A">A2A</option>
+              <option value="OpenAI">OpenAI</option>
+              <option value="Anthropic">Anthropic</option>
+              <option value="CustomREST">CustomREST</option>
+            </select>
+          </label>
+          <label>Minimum Trust Score<input id="minimumTrust" type="number" min="0" max="100" value="60" required /></label>
+          <label>Priority
+            <select id="priority" required>
+              <option value="P1-Critical">P1-Critical</option>
+              <option value="P2-High">P2-High</option>
+              <option value="P3-Normal">P3-Normal</option>
+              <option value="P4-Low">P4-Low</option>
+            </select>
+          </label>
+          <label>Max Budget (USD)<input id="reward" type="number" min="10" step="10" required /></label>
+          <label>SLA Hours<input id="slaHours" type="number" min="1" step="1" required /></label>
+          <label>Deadline<input id="deadline" type="date" required /></label>
+          <label>NDA Required
+            <select id="ndaRequired" required>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </label>
+          <label class="full">Acceptance Criteria<textarea id="description" rows="3" required></textarea></label>
+          <button type="submit">Create Task and Fund Escrow</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Task Marketplace</h2>
+        <div class="filters">
+          <input id="searchInput" placeholder="search title, org, skill, assignee, protocol..." />
+          <select id="statusFilter">
+            <option value="all">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="bidding">Bidding</option>
+            <option value="in_progress">In Progress</option>
+            <option value="submitted">Submitted</option>
+            <option value="disputed">Disputed</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div id="tasksContainer" class="stack"></div>
+      </section>
+
+      <section class="panel two-col">
+        <div>
+          <h2>Payouts and Escrow Ledger</h2>
+          <p>Escrow Balance: <strong id="escrowBalance">$0</strong></p>
+          <p>Total Payouts Released: <strong id="totalPaid">$0</strong></p>
+          <ul id="payoutLog" class="log"></ul>
+        </div>
+        <div>
+          <h2>Audit Trail</h2>
+          <button id="exportAudit" type="button">Export Audit JSON</button>
+          <ul id="auditLog" class="log"></ul>
+        </div>
+      </section>
+    </main>
+
+    <template id="taskTemplate">
+      <article class="task">
+        <div class="task-head">
+          <h3 class="task-title"></h3>
+          <span class="badge status"></span>
+        </div>
+        <p class="meta"></p>
+        <p class="interop"></p>
+        <p class="criteria"></p>
+        <p class="assignee"></p>
+        <p class="submission"></p>
+        <p class="bids"></p>
+        <div class="actions"></div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
